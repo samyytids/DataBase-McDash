@@ -120,11 +120,17 @@ try:
 except:
     pass
 
+conn.commit()            
+conn.close()
 
 for file in os.listdir(mcdash_directory):
     file = str(file).replace('b', '').replace("'", '')
     with pd.read_csv(rf'C:\Users\STAJa\Desktop\McPython\{file}', chunksize=chunksize) as reader:
         for chunk in reader:
+            print(file)
+            conn = sqlite3.connect('McDash.db')
+            cursor = conn.cursor()
+
             full_variables = McDashFullVariables(
                 Loanid = chunk['Loanid'],
                 year = chunk['year'],
@@ -219,6 +225,8 @@ for file in os.listdir(mcdash_directory):
             '{misc_variables.RemainingTerm}'
         )""")
 
-conn.commit()            
-conn.close()
+        conn.commit()            
+        conn.close()
+
+
                 
